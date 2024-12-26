@@ -36,6 +36,7 @@ import (
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	clientgoinformers "k8s.io/client-go/informers"
 	"k8s.io/client-go/kubernetes"
+	"k8s.io/component-base/featuregate"
 	zpagesfeatures "k8s.io/component-base/zpages/features"
 	"k8s.io/component-base/zpages/flagz"
 	"k8s.io/component-base/zpages/statusz"
@@ -161,7 +162,7 @@ func (c completedConfig) New(name string, delegationTarget genericapiserver.Dele
 	}
 
 	if utilfeature.DefaultFeatureGate.Enabled(zpagesfeatures.ComponentStatusz) {
-		statusz.Install(s.GenericAPIServer.Handler.NonGoRestfulMux, name, statusz.NewRegistry())
+		statusz.Install(s.GenericAPIServer.Handler.NonGoRestfulMux, name, statusz.NewRegistry(featuregate.DefaultComponentGlobalsRegistry))
 	}
 
 	if utilfeature.DefaultFeatureGate.Enabled(apiserverfeatures.CoordinatedLeaderElection) {

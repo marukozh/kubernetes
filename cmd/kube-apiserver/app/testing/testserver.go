@@ -206,8 +206,8 @@ func StartTestServer(t ktesting.TB, instanceOptions *TestServerInstanceOptions, 
 	}
 	// need to call SetFeatureGateEmulationVersionDuringTest to reset the feature gate emulation version at the end of the test.
 	featuregatetesting.SetFeatureGateEmulationVersionDuringTest(t, featureGate, effectiveVersion.EmulationVersion())
-	featuregate.DefaultComponentGlobalsRegistry.Reset()
-	utilruntime.Must(featuregate.DefaultComponentGlobalsRegistry.Register(featuregate.DefaultKubeComponent, effectiveVersion, featureGate))
+	compatibility.DefaultComponentGlobalsRegistry.Reset()
+	utilruntime.Must(compatibility.DefaultComponentGlobalsRegistry.Register(featuregate.DefaultKubeComponent, effectiveVersion, featureGate))
 
 	s := options.NewServerRunOptions()
 	if instanceOptions.RequestTimeout > 0 {
@@ -375,7 +375,7 @@ func StartTestServer(t ktesting.TB, instanceOptions *TestServerInstanceOptions, 
 		s.Authentication.RequestHeader.ExtraHeaderPrefixes = extraHeaders
 	}
 
-	if err := featuregate.DefaultComponentGlobalsRegistry.Set(); err != nil {
+	if err := compatibility.DefaultComponentGlobalsRegistry.Set(); err != nil {
 		return result, err
 	}
 

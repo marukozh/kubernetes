@@ -62,6 +62,7 @@ import (
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	"k8s.io/apiserver/pkg/util/flushwriter"
 	"k8s.io/component-base/configz"
+	"k8s.io/component-base/featuregate"
 	"k8s.io/component-base/logs"
 	compbasemetrics "k8s.io/component-base/metrics"
 	metricsfeatures "k8s.io/component-base/metrics/features"
@@ -576,7 +577,7 @@ func (s *Server) InstallDebuggingHandlers() {
 
 	if utilfeature.DefaultFeatureGate.Enabled(zpagesfeatures.ComponentStatusz) {
 		s.addMetricsBucketMatcher("statusz")
-		statusz.Install(s.restfulCont, ComponentKubelet, statusz.NewRegistry())
+		statusz.Install(s.restfulCont, ComponentKubelet, statusz.NewRegistry(featuregate.DefaultComponentGlobalsRegistry))
 	}
 
 	// The /runningpods endpoint is used for testing only.
